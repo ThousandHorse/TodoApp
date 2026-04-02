@@ -11,7 +11,8 @@
 ③ PATH を通す
 ④ Xcode セットアップ（iOS用）
 ⑤ Android Studio セットアップ（Android用）
-⑥ flutter doctor で確認
+⑥ FlutterFire CLI のインストール
+⑦ flutter doctor で確認
 ```
 
 ---
@@ -139,7 +140,63 @@ Android Studio →「More Actions」→「Virtual Device Manager」→「Create 
 
 ---
 
-## ⑥ flutter doctor で最終確認
+## ⑥ FlutterFire CLI のインストール
+
+Firebase と Flutter を連携させるための **FlutterFire CLI** を導入します。
+このツールを使うと、`flutterfire configure` コマンド1つで `firebase_options.dart` が自動生成されます。
+
+### 6-1. Firebase CLI をインストール
+
+FlutterFire CLI は内部で Firebase CLI を使います。まず Firebase CLI を入れます。
+
+```bash
+# Node.js が必要（未インストールの場合は https://nodejs.org からインストール）
+npm install -g firebase-tools
+```
+
+> ✅ `node -v` で Node.js のバージョンが表示されれば OK。
+
+### 6-2. Firebase にログイン
+
+```bash
+firebase login
+# ブラウザが開くので Google アカウントでログイン
+```
+
+### 6-3. FlutterFire CLI をインストール
+
+```bash
+dart pub global activate flutterfire_cli
+```
+
+### 6-4. PATH を確認・追加
+
+```bash
+flutterfire --version
+# バージョンが表示されない場合は以下を .zshrc に追記
+
+echo 'export PATH="$PATH:$HOME/.pub-cache/bin"' >> ~/.zshrc
+source ~/.zshrc
+
+# 再確認
+flutterfire --version
+```
+
+### 6-5. Firebase プロジェクトと接続
+
+Flutter プロジェクトのルートディレクトリで実行：
+
+```bash
+flutterfire configure --project=YOUR_FIREBASE_PROJECT_ID
+```
+
+> **YOUR_FIREBASE_PROJECT_ID** は [Firebase Console](https://console.firebase.google.com/) →「プロジェクトの設定」→「プロジェクト ID」で確認できます。
+
+実行すると `lib/firebase_options.dart` が自動生成されます。
+
+---
+
+## ⑦ flutter doctor で最終確認
 
 ```bash
 flutter doctor
@@ -154,6 +211,8 @@ flutter doctor
 [✓] Network resources
 • No issues found!
 ```
+
+> ℹ️ `[!] Chrome - develop for the web` は Web 開発をしない場合は無視してOKです。
 
 ### よくある警告と対処
 

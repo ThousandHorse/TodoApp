@@ -13,7 +13,8 @@
 ② Flutter SDK インストール
 ③ PATH を通す
 ④ Android Studio セットアップ
-⑤ flutter doctor で確認
+⑤ FlutterFire CLI のインストール
+⑥ flutter doctor で確認
 ```
 
 ---
@@ -138,7 +139,80 @@ Android Studio →「More Actions」→「Virtual Device Manager」→「Create 
 
 ---
 
-## ⑤ flutter doctor で最終確認
+## ⑤ FlutterFire CLI のインストール
+
+Firebase と Flutter を連携させるための **FlutterFire CLI** を導入します。
+このツールを使うと、`flutterfire configure` コマンド1つで `firebase_options.dart` が自動生成されます。
+
+### 5-1. Node.js をインストール
+
+FlutterFire CLI は内部で Firebase CLI（Node.js 製）を使います。
+
+[https://nodejs.org](https://nodejs.org) から **LTS 版**をダウンロードしてインストール。
+
+```powershell
+# インストール確認
+node -v   # v18.x.x などと表示されればOK
+npm -v
+```
+
+### 5-2. Firebase CLI をインストール
+
+```powershell
+npm install -g firebase-tools
+```
+
+### 5-3. Firebase にログイン
+
+```powershell
+firebase login
+# ブラウザが開くので Google アカウントでログイン
+```
+
+### 5-4. FlutterFire CLI をインストール
+
+```powershell
+dart pub global activate flutterfire_cli
+```
+
+### 5-5. PATH を確認・追加
+
+```powershell
+flutterfire --version
+```
+
+表示されない場合は PATH を追加します：
+
+1. スタートメニューで「環境変数」と検索 →「システム環境変数の編集」を開く
+2.「環境変数」→「ユーザー環境変数」の `Path` を編集
+3.「新規」→ 以下を追加：
+
+```
+%USERPROFILE%\AppData\Local\Pub\Cache\bin
+```
+
+4. PowerShell を再起動して再確認：
+
+```powershell
+flutterfire --version
+# flutterfire_cli x.x.x などと表示されればOK
+```
+
+### 5-6. Firebase プロジェクトと接続
+
+Flutter プロジェクトのルートディレクトリで実行：
+
+```powershell
+flutterfire configure --project=YOUR_FIREBASE_PROJECT_ID
+```
+
+> **YOUR_FIREBASE_PROJECT_ID** は [Firebase Console](https://console.firebase.google.com/) →「プロジェクトの設定」→「プロジェクト ID」で確認できます。
+
+実行すると `lib/firebase_options.dart` が自動生成されます。
+
+---
+
+## ⑥ flutter doctor で最終確認
 
 ```powershell
 flutter doctor

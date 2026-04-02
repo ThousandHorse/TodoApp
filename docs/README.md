@@ -34,21 +34,94 @@ Flutter 初心者向けに、このアプリで使っている技術と実装内
 
 ## クイックスタート
 
+このアプリを手元で動かすまでの手順です。
+
+### 前提条件
+
+Flutter と Firebase の環境が整っていない場合は、先にセットアップドキュメントを参照してください：
+
+| OS | セットアップ手順 |
+|---|---|
+| Mac | [setup/flutter_setup_mac.md](setup/flutter_setup_mac.md) |
+| Windows | [setup/flutter_setup_windows.md](setup/flutter_setup_windows.md) |
+
+> ⚠️ **FlutterFire CLI（`flutterfire` コマンド）** が必要です。未導入の場合は各セットアップドキュメントの「FlutterFire CLI のインストール」セクションを参照してください。
+
+---
+
+### 手順
+
+#### ① パッケージをインストール
+
 ```bash
-# 1. パッケージをインストール
 flutter pub get
+```
 
-# 2. コードを生成
+`pubspec.yaml` に記載された依存ライブラリをすべてダウンロードします。
+
+---
+
+#### ② コードを自動生成
+
+```bash
 dart run build_runner build --delete-conflicting-outputs
+```
 
-# 3. Firebase を設定（firebase_options.dart を生成）
+`freezed`・`json_serializable`・`riverpod_generator` が使うコード（`*.freezed.dart`、`*.g.dart`）を生成します。
+これを実行しないとアプリがビルドできません。
+
+> ℹ️ コードを変更するたびに再実行が必要です。継続的に変更する場合は `watch` オプションが便利です：
+> ```bash
+> dart run build_runner watch --delete-conflicting-outputs
+> ```
+
+---
+
+#### ③ Firebase を設定する
+
+Firebase との接続設定ファイル `lib/firebase_options.dart` を生成します。
+
+```bash
 flutterfire configure --project=YOUR_FIREBASE_PROJECT_ID
+```
 
-# 4. アプリを起動
+**YOUR_FIREBASE_PROJECT_ID の確認方法：**
+[Firebase Console](https://console.firebase.google.com/) →「プロジェクトの設定（歯車アイコン）」→「プロジェクト ID」
+
+> ⚠️ `firebase_options.dart` はセキュリティ情報を含むため `.gitignore` に含まれています。
+> リポジトリをクローンした場合は**毎回この手順が必要**です。
+
+---
+
+#### ④ アプリを起動
+
+```bash
 flutter run
+```
 
-# 5. テストを実行
+接続済みのデバイス（実機 or エミュレータ）でアプリが起動します。
+
+```bash
+# 複数デバイスが接続されている場合はデバイスを指定
+flutter run -d <device_id>
+
+# 接続デバイスの一覧確認
+flutter devices
+```
+
+---
+
+#### ⑤ テストを実行
+
+```bash
 flutter test
+```
+
+全テスト（11件）が通ることを確認します。
+
+```bash
+# カバレッジ付きで実行
+flutter test --coverage
 ```
 
 ---
