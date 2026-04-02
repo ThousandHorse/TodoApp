@@ -40,8 +40,9 @@ class _EditTodoDialogState extends ConsumerState<EditTodoDialog> {
     super.initState(); // 親クラスの initState を先に呼ぶ
     // `widget.プロパティ名` で ConsumerStatefulWidget のフィールドにアクセス
     _titleController = TextEditingController(text: widget.todo.title);
-    _descriptionController =
-        TextEditingController(text: widget.todo.description ?? '');
+    _descriptionController = TextEditingController(
+      text: widget.todo.description ?? '',
+    );
     // `?? ''` = null なら空文字を使う（null 合体演算子）
   }
 
@@ -62,7 +63,9 @@ class _EditTodoDialogState extends ConsumerState<EditTodoDialog> {
     // `widget.todo.copyWith(...)` で変更したフィールドだけを更新した
     // 新しい Todo オブジェクトを作成（freezed の copyWith を使用）。
     // 元のオブジェクトは変更せず、新しいオブジェクトを作ります（イミュータブル）。
-    await ref.read(todoListProvider.notifier).updateTodo(
+    await ref
+        .read(todoListProvider.notifier)
+        .updateTodo(
           widget.todo.copyWith(
             title: title,
             description: _descriptionController.text.trim().isEmpty

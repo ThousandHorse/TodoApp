@@ -40,7 +40,10 @@ class TodoModel {
   final DateTime createdAt;
 
   // nullable（null を許容）な日時フィールドも同様に変換関数を指定。
-  @JsonKey(fromJson: _nullableTimestampFromJson, toJson: _nullableTimestampToJson)
+  @JsonKey(
+    fromJson: _nullableTimestampFromJson,
+    toJson: _nullableTimestampToJson,
+  )
   final DateTime? updatedAt;
 
   const TodoModel({
@@ -84,21 +87,21 @@ class TodoModel {
   // ── ドメインエンティティ ↔ TodoModel 変換 ──────────────────
   // Firestore から取得した TodoModel をアプリ内で使う Todo に変換
   Todo toDomain() => Todo(
-        id: id,
-        title: title,
-        description: description,
-        isCompleted: isCompleted,
-        createdAt: createdAt,
-        updatedAt: updatedAt,
-      );
+    id: id,
+    title: title,
+    description: description,
+    isCompleted: isCompleted,
+    createdAt: createdAt,
+    updatedAt: updatedAt,
+  );
 
   // アプリ内の Todo を Firestore に保存するための TodoModel に変換
   factory TodoModel.fromDomain(Todo todo) => TodoModel(
-        id: todo.id,
-        title: todo.title,
-        description: todo.description,
-        isCompleted: todo.isCompleted,
-        createdAt: todo.createdAt,
-        updatedAt: todo.updatedAt,
-      );
+    id: todo.id,
+    title: todo.title,
+    description: todo.description,
+    isCompleted: todo.isCompleted,
+    createdAt: todo.createdAt,
+    updatedAt: todo.updatedAt,
+  );
 }

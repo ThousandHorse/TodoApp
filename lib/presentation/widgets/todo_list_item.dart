@@ -52,8 +52,8 @@ class TodoListItem extends ConsumerWidget {
           ? Text(
               todo.description!,
               // `!` = null でないことを開発者が保証する（null チェック済み）
-              maxLines: 1,                        // 最大1行まで
-              overflow: TextOverflow.ellipsis,    // 溢れたら「...」で省略
+              maxLines: 1, // 最大1行まで
+              overflow: TextOverflow.ellipsis, // 溢れたら「...」で省略
             )
           : null,
 
@@ -74,9 +74,8 @@ class TodoListItem extends ConsumerWidget {
           // 削除ボタン: タップで deleteTodo を呼ぶ
           IconButton(
             icon: const Icon(Icons.delete_outline),
-            onPressed: () => ref
-                .read(todoListProvider.notifier)
-                .deleteTodo(todo.id),
+            onPressed: () =>
+                ref.read(todoListProvider.notifier).deleteTodo(todo.id),
           ),
         ],
       ),

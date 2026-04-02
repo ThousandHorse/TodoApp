@@ -49,5 +49,4 @@ class DefaultFirebaseOptions {
     storageBucket: 'todoapp-8964d.firebasestorage.app',
     iosBundleId: 'com.thousandhorse.todoApp',
   );
-
 }

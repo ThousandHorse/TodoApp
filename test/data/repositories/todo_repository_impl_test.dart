@@ -47,10 +47,7 @@ void main() {
     });
 
     test('addTodo で description も保存できる', () async {
-      await repository.addTodo(
-        title: 'タイトル',
-        description: 'メモ内容',
-      );
+      await repository.addTodo(title: 'タイトル', description: 'メモ内容');
 
       final todos = await repository.watchTodos().first;
       expect(todos.first.description, 'メモ内容');

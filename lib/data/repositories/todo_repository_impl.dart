@@ -44,8 +44,8 @@ class TodoRepositoryImpl implements TodoRepository {
   @override
   Stream<List<Todo>> watchTodos() {
     return _datasource.watchTodos().map(
-          (models) => models.map((m) => m.toDomain()).toList(),
-        );
+      (models) => models.map((m) => m.toDomain()).toList(),
+    );
   }
 
   // ── addTodo ─────────────────────────────────────────────────
@@ -58,10 +58,10 @@ class TodoRepositoryImpl implements TodoRepository {
   @override
   Future<void> addTodo({required String title, String? description}) async {
     final model = TodoModel(
-      id: _uuid.v4(),         // ランダムな一意 ID を生成
+      id: _uuid.v4(), // ランダムな一意 ID を生成
       title: title,
       description: description,
-      isCompleted: false,      // 新規タスクは未完了から始まる
+      isCompleted: false, // 新規タスクは未完了から始まる
       createdAt: DateTime.now(),
     );
     await _datasource.addTodo(model);

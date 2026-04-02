@@ -37,7 +37,12 @@ void main() {
   setUpAll(() {
     registerFallbackValue(
       // any() のフォールバック値（実際には使われないダミー）
-      Todo(id: 'fallback', title: '', isCompleted: false, createdAt: DateTime(2024)),
+      Todo(
+        id: 'fallback',
+        title: '',
+        isCompleted: false,
+        createdAt: DateTime(2024),
+      ),
     );
   });
 
@@ -47,9 +52,7 @@ void main() {
     // ProviderContainer = テスト用の Riverpod コンテナ。
     // overrides でモックリポジトリを注入します。
     container = ProviderContainer(
-      overrides: [
-        todoRepositoryProvider.overrideWithValue(mockRepo),
-      ],
+      overrides: [todoRepositoryProvider.overrideWithValue(mockRepo)],
     );
   });
 
@@ -67,8 +70,9 @@ void main() {
   group('TodoList Notifier', () {
     test('build() がリポジトリのStreamを監視する', () async {
       // when() で watchTodos() が呼ばれたときの戻り値を設定
-      when(() => mockRepo.watchTodos())
-          .thenAnswer((_) => Stream.value([sampleTodo]));
+      when(
+        () => mockRepo.watchTodos(),
+      ).thenAnswer((_) => Stream.value([sampleTodo]));
 
       // `.future` = AsyncNotifier が Stream から最初の値を解決するまで待つ
       final result = await container.read(todoListProvider.future);
@@ -79,20 +83,25 @@ void main() {
 
     test('addTodo がリポジトリのaddTodoを呼び出す', () async {
       when(() => mockRepo.watchTodos()).thenAnswer((_) => Stream.value([]));
-      when(() => mockRepo.addTodo(title: 'New Task', description: null))
-          .thenAnswer((_) async {}); // 非同期で何もしない
+      when(
+        () => mockRepo.addTodo(title: 'New Task', description: null),
+      ).thenAnswer((_) async {}); // 非同期で何もしない
 
       // Notifier のメソッドを実行
-      await container.read(todoListProvider.notifier).addTodo(title: 'New Task');
+      await container
+          .read(todoListProvider.notifier)
+          .addTodo(title: 'New Task');
 
       // verify() で「addTodo が1回呼ばれたこと」を検証
-      verify(() => mockRepo.addTodo(title: 'New Task', description: null))
-          .called(1);
+      verify(
+        () => mockRepo.addTodo(title: 'New Task', description: null),
+      ).called(1);
     });
 
     test('toggleCompleted が isCompleted を反転させて updateTodo を呼ぶ', () async {
-      when(() => mockRepo.watchTodos())
-          .thenAnswer((_) => Stream.value([sampleTodo]));
+      when(
+        () => mockRepo.watchTodos(),
+      ).thenAnswer((_) => Stream.value([sampleTodo]));
       // any() = どんな Todo 引数でもマッチする
       when(() => mockRepo.updateTodo(any())).thenAnswer((_) async {});
 
@@ -112,9 +121,7 @@ void main() {
       when(() => mockRepo.watchTodos()).thenAnswer((_) => Stream.value([]));
       when(() => mockRepo.deleteTodo('test-id')).thenAnswer((_) async {});
 
-      await container
-          .read(todoListProvider.notifier)
-          .deleteTodo('test-id');
+      await container.read(todoListProvider.notifier).deleteTodo('test-id');
 
       verify(() => mockRepo.deleteTodo('test-id')).called(1);
     });

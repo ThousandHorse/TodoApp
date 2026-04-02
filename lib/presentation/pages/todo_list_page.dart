@@ -39,10 +39,7 @@ class TodoListPage extends ConsumerWidget {
 
     return Scaffold(
       // AppBar = 画面上部のバー
-      appBar: AppBar(
-        title: const Text('Todo'),
-        centerTitle: true,
-      ),
+      appBar: AppBar(title: const Text('Todo'), centerTitle: true),
 
       // .when() メソッドで AsyncValue の3状態それぞれのUIを定義する。
       // これが Riverpod の AsyncNotifier の最大の特徴のひとつです。
@@ -52,9 +49,7 @@ class TodoListPage extends ConsumerWidget {
 
         // エラー時はエラーメッセージを表示
         // `err` にエラー内容、`stack` にスタックトレースが入ります
-        error: (err, stack) => Center(
-          child: Text('エラーが発生しました: $err'),
-        ),
+        error: (err, stack) => Center(child: Text('エラーが発生しました: $err')),
 
         // データ取得成功時
         data: (todos) => todos.isEmpty
