@@ -163,7 +163,54 @@ flutter doctor
 | `Android sdkmanager not found` | Android Studio の SDK Tools から `cmdline-tools` をインストール |
 | `Android license status unknown` | `flutter doctor --android-licenses` を実行 |
 | `Unable to find git in your PATH` | Git for Windows をインストール後、PowerShell を再起動 |
-| `Flutter requires the Visual Studio toolchain` | Windows デスクトップアプリ開発時のみ必要。モバイル開発には不要 |
+| `Flutter requires the Visual Studio toolchain` | Windows デスクトップアプリ開発時のみ必要。**Android/Web 開発には不要**（無視してOK） |
+
+---
+
+## Visual Studio について（よくある疑問）
+
+`flutter doctor` を実行すると、以下のような警告が表示されることがあります：
+
+```
+[!] Visual Studio - develop Windows apps
+    X Visual Studio not installed; this is necessary to develop Windows apps
+```
+
+### なぜ警告が出るのか？
+
+Flutter は **Windows デスクトップアプリ（.exe）** を作る機能も持っています。
+Windows アプリをビルドするには C++ のコンパイラが必要で、それが **Visual Studio** に含まれているため、インストールを求めてきます。
+
+### Android 開発なら無視してOK
+
+このドキュメントは **Android 向けモバイルアプリ開発** を対象にしています。
+Android ビルドは Java/Kotlin ベースの Android SDK を使うため、Visual Studio は**まったく不要**です。
+
+| ターゲット | Visual Studio | 備考 |
+|---|---|---|
+| Android アプリ | **不要** | Android SDK でビルド |
+| Web アプリ | **不要** | Dart → JS にトランスパイル |
+| Windows デスクトップ | **必要** | C++ コンパイラ (MSVC) が必要 |
+| iOS アプリ | **不要**（そもそも不可） | macOS + Xcode が必要 |
+
+> ✅ **まとめ：Android 開発目的なら `[!] Visual Studio` の警告は無視して問題ありません。**
+> `flutter doctor` が `[✓] Flutter` `[✓] Android toolchain` `[✓] Android Studio` の3つを満たしていればOKです。
+
+### Windows デスクトップアプリも作りたい場合
+
+Visual Studio をインストールする必要があります：
+
+1. [Visual Studio 公式サイト](https://visualstudio.microsoft.com/ja/) から **Community（無料）** をダウンロード
+2. インストーラー起動 →「**Desktop development with C++**」ワークロードにチェック
+3. インストール完了後、PowerShell で確認：
+
+```powershell
+flutter doctor
+# [✓] Visual Studio - develop Windows apps (Visual Studio Community 2022 17.x)
+```
+
+> ⚠️ Visual Studio のインストールには **約 8〜10GB** のディスク容量が必要です。
+> Android 開発のみであれば不要なので、容量節約のためにスキップ推奨。
 
 ---
 
