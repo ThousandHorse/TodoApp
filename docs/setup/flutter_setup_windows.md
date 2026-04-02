@@ -37,25 +37,41 @@
 
 ## ② Flutter SDK のインストール
 
-### winget でインストール（推奨）
-
-Windows 10 1709以降はパッケージマネージャー **winget** が標準で使えます。
-PowerShell（管理者権限）を開いて実行：
-
-```powershell
-winget install Flutter.Flutter
-```
-
-### 手動インストールの場合
+### 方法A：手動インストール（推奨・最も確実）
 
 1. [Flutter 公式サイト](https://docs.flutter.dev/get-started/install/windows) から最新の ZIP をダウンロード
-2. `C:\flutter` に展開（`C:\Program Files` など空白のあるパスは避ける）
+2. `C:\flutter` に展開
+
+> ⚠️ `C:\Program Files` など**パスに空白や日本語が含まれる場所は避ける**こと。
+
+### 方法B：Chocolatey でインストール
+
+**Chocolatey**（Windows のパッケージマネージャー）を使う方法です。
+
+まず Chocolatey をインストール（管理者権限の PowerShell で実行）：
+
+```powershell
+Set-ExecutionPolicy Bypass -Scope Process -Force
+[System.Net.ServicePointManager]::SecurityProtocol = `
+  [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
+iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+```
+
+Flutter をインストール：
+
+```powershell
+choco install flutter
+```
+
+> ℹ️ **winget（`winget install Flutter.Flutter`）は使えません。**
+> Flutter は winget のパッケージリポジトリに登録されていないため、
+> 「入力条件に一致するパッケージが見つかりませんでした」というエラーになります。
 
 ---
 
 ## ③ PATH を通す
 
-### winget でインストールした場合
+### Chocolatey でインストールした場合
 
 PATH は自動で設定されます。新しい PowerShell を開いて確認：
 
@@ -186,6 +202,6 @@ VS Code のダウンロード：[https://code.visualstudio.com/](https://code.vi
 | iOS ビルド | ✅ 可能 | ❌ 不可（Xcode が必要） |
 | Android ビルド | ✅ 可能 | ✅ 可能 |
 | Web ビルド | ✅ 可能 | ✅ 可能 |
-| Flutter インストール | Homebrew 推奨 | winget 推奨 |
+| Flutter インストール | Homebrew 推奨 | 手動 or Chocolatey 推奨 |
 | シェル | zsh (.zshrc) | PowerShell |
 | PATH 設定 | .zshrc に追記 | 環境変数の GUI で設定 |
