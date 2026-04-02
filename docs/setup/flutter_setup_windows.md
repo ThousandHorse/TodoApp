@@ -13,7 +13,8 @@
 ② Flutter SDK インストール
 ③ PATH を通す
 ④ Android Studio セットアップ
-⑤ flutter doctor で確認
+⑤ FlutterFire CLI のインストール
+⑥ flutter doctor で確認
 ```
 
 ---
@@ -37,25 +38,41 @@
 
 ## ② Flutter SDK のインストール
 
-### winget でインストール（推奨）
-
-Windows 10 1709以降はパッケージマネージャー **winget** が標準で使えます。
-PowerShell（管理者権限）を開いて実行：
-
-```powershell
-winget install Flutter.Flutter
-```
-
-### 手動インストールの場合
+### 方法A：手動インストール（推奨・最も確実）
 
 1. [Flutter 公式サイト](https://docs.flutter.dev/get-started/install/windows) から最新の ZIP をダウンロード
-2. `C:\flutter` に展開（`C:\Program Files` など空白のあるパスは避ける）
+2. `C:\flutter` に展開
+
+> ⚠️ `C:\Program Files` など**パスに空白や日本語が含まれる場所は避ける**こと。
+
+### 方法B：Chocolatey でインストール
+
+**Chocolatey**（Windows のパッケージマネージャー）を使う方法です。
+
+まず Chocolatey をインストール（管理者権限の PowerShell で実行）：
+
+```powershell
+Set-ExecutionPolicy Bypass -Scope Process -Force
+[System.Net.ServicePointManager]::SecurityProtocol = `
+  [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
+iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+```
+
+Flutter をインストール：
+
+```powershell
+choco install flutter
+```
+
+> ℹ️ **winget（`winget install Flutter.Flutter`）は使えません。**
+> Flutter は winget のパッケージリポジトリに登録されていないため、
+> 「入力条件に一致するパッケージが見つかりませんでした」というエラーになります。
 
 ---
 
 ## ③ PATH を通す
 
-### winget でインストールした場合
+### Chocolatey でインストールした場合
 
 PATH は自動で設定されます。新しい PowerShell を開いて確認：
 
@@ -122,7 +139,80 @@ Android Studio →「More Actions」→「Virtual Device Manager」→「Create 
 
 ---
 
-## ⑤ flutter doctor で最終確認
+## ⑤ FlutterFire CLI のインストール
+
+Firebase と Flutter を連携させるための **FlutterFire CLI** を導入します。
+このツールを使うと、`flutterfire configure` コマンド1つで `firebase_options.dart` が自動生成されます。
+
+### 5-1. Node.js をインストール
+
+FlutterFire CLI は内部で Firebase CLI（Node.js 製）を使います。
+
+[https://nodejs.org](https://nodejs.org) から **LTS 版**をダウンロードしてインストール。
+
+```powershell
+# インストール確認
+node -v   # v18.x.x などと表示されればOK
+npm -v
+```
+
+### 5-2. Firebase CLI をインストール
+
+```powershell
+npm install -g firebase-tools
+```
+
+### 5-3. Firebase にログイン
+
+```powershell
+firebase login
+# ブラウザが開くので Google アカウントでログイン
+```
+
+### 5-4. FlutterFire CLI をインストール
+
+```powershell
+dart pub global activate flutterfire_cli
+```
+
+### 5-5. PATH を確認・追加
+
+```powershell
+flutterfire --version
+```
+
+表示されない場合は PATH を追加します：
+
+1. スタートメニューで「環境変数」と検索 →「システム環境変数の編集」を開く
+2.「環境変数」→「ユーザー環境変数」の `Path` を編集
+3.「新規」→ 以下を追加：
+
+```
+%USERPROFILE%\AppData\Local\Pub\Cache\bin
+```
+
+4. PowerShell を再起動して再確認：
+
+```powershell
+flutterfire --version
+# flutterfire_cli x.x.x などと表示されればOK
+```
+
+### 5-6. Firebase プロジェクトと接続
+
+Flutter プロジェクトのルートディレクトリで実行：
+
+```powershell
+flutterfire configure --project=YOUR_FIREBASE_PROJECT_ID
+```
+
+> **YOUR_FIREBASE_PROJECT_ID** は [Firebase Console](https://console.firebase.google.com/) →「プロジェクトの設定」→「プロジェクト ID」で確認できます。
+
+実行すると `lib/firebase_options.dart` が自動生成されます。
+
+---
+
+## ⑥ flutter doctor で最終確認
 
 ```powershell
 flutter doctor
@@ -147,7 +237,54 @@ flutter doctor
 | `Android sdkmanager not found` | Android Studio の SDK Tools から `cmdline-tools` をインストール |
 | `Android license status unknown` | `flutter doctor --android-licenses` を実行 |
 | `Unable to find git in your PATH` | Git for Windows をインストール後、PowerShell を再起動 |
-| `Flutter requires the Visual Studio toolchain` | Windows デスクトップアプリ開発時のみ必要。モバイル開発には不要 |
+| `Flutter requires the Visual Studio toolchain` | Windows デスクトップアプリ開発時のみ必要。**Android/Web 開発には不要**（無視してOK） |
+
+---
+
+## Visual Studio について（よくある疑問）
+
+`flutter doctor` を実行すると、以下のような警告が表示されることがあります：
+
+```
+[!] Visual Studio - develop Windows apps
+    X Visual Studio not installed; this is necessary to develop Windows apps
+```
+
+### なぜ警告が出るのか？
+
+Flutter は **Windows デスクトップアプリ（.exe）** を作る機能も持っています。
+Windows アプリをビルドするには C++ のコンパイラが必要で、それが **Visual Studio** に含まれているため、インストールを求めてきます。
+
+### Android 開発なら無視してOK
+
+このドキュメントは **Android 向けモバイルアプリ開発** を対象にしています。
+Android ビルドは Java/Kotlin ベースの Android SDK を使うため、Visual Studio は**まったく不要**です。
+
+| ターゲット | Visual Studio | 備考 |
+|---|---|---|
+| Android アプリ | **不要** | Android SDK でビルド |
+| Web アプリ | **不要** | Dart → JS にトランスパイル |
+| Windows デスクトップ | **必要** | C++ コンパイラ (MSVC) が必要 |
+| iOS アプリ | **不要**（そもそも不可） | macOS + Xcode が必要 |
+
+> ✅ **まとめ：Android 開発目的なら `[!] Visual Studio` の警告は無視して問題ありません。**
+> `flutter doctor` が `[✓] Flutter` `[✓] Android toolchain` `[✓] Android Studio` の3つを満たしていればOKです。
+
+### Windows デスクトップアプリも作りたい場合
+
+Visual Studio をインストールする必要があります：
+
+1. [Visual Studio 公式サイト](https://visualstudio.microsoft.com/ja/) から **Community（無料）** をダウンロード
+2. インストーラー起動 →「**Desktop development with C++**」ワークロードにチェック
+3. インストール完了後、PowerShell で確認：
+
+```powershell
+flutter doctor
+# [✓] Visual Studio - develop Windows apps (Visual Studio Community 2022 17.x)
+```
+
+> ⚠️ Visual Studio のインストールには **約 8〜10GB** のディスク容量が必要です。
+> Android 開発のみであれば不要なので、容量節約のためにスキップ推奨。
 
 ---
 
@@ -186,6 +323,6 @@ VS Code のダウンロード：[https://code.visualstudio.com/](https://code.vi
 | iOS ビルド | ✅ 可能 | ❌ 不可（Xcode が必要） |
 | Android ビルド | ✅ 可能 | ✅ 可能 |
 | Web ビルド | ✅ 可能 | ✅ 可能 |
-| Flutter インストール | Homebrew 推奨 | winget 推奨 |
+| Flutter インストール | Homebrew 推奨 | 手動 or Chocolatey 推奨 |
 | シェル | zsh (.zshrc) | PowerShell |
 | PATH 設定 | .zshrc に追記 | 環境変数の GUI で設定 |
