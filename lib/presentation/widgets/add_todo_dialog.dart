@@ -62,7 +62,9 @@ class _AddTodoDialogState extends ConsumerState<AddTodoDialog> {
 
     // Riverpod のプロバイダー経由でタスクを追加する。
     // .notifier = Notifier（操作メソッドを持つ）へのアクセサ
-    await ref.read(todoListProvider.notifier).addTodo(
+    await ref
+        .read(todoListProvider.notifier)
+        .addTodo(
           title: title,
           // 空文字の場合は null として保存（description は任意項目）
           description: _descriptionController.text.trim().isEmpty
@@ -85,7 +87,7 @@ class _AddTodoDialogState extends ConsumerState<AddTodoDialog> {
         children: [
           TextField(
             controller: _titleController, // コントローラーを紐付け
-            autofocus: true,             // ダイアログを開いた直後にフォーカス
+            autofocus: true, // ダイアログを開いた直後にフォーカス
             decoration: const InputDecoration(
               labelText: 'タイトル *',
               border: OutlineInputBorder(), // 枠線スタイル

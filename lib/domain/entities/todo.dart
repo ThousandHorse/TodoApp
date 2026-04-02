@@ -26,12 +26,12 @@ class Todo with _$Todo {
   // `const factory` コンストラクタが freezed のお作法です。
   // freezed はこれを見て自動生成コードを作ります。
   const factory Todo({
-    required String id,           // タスクを一意に識別するID (UUID)
-    required String title,        // タスクのタイトル（必須）
-    String? description,          // メモ（任意。? は null を許容する型）
+    required String id, // タスクを一意に識別するID (UUID)
+    required String title, // タスクのタイトル（必須）
+    String? description, // メモ（任意。? は null を許容する型）
     @Default(false) bool isCompleted, // 完了フラグ。省略時は false
-    required DateTime createdAt,  // 作成日時（必須）
-    DateTime? updatedAt,          // 更新日時（任意。初回は null）
+    required DateTime createdAt, // 作成日時（必須）
+    DateTime? updatedAt, // 更新日時（任意。初回は null）
   }) = _Todo;
   // `= _Todo` は freezed が生成するプライベートクラスの名前です。
 }

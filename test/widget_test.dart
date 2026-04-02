@@ -42,9 +42,7 @@ void main() {
     // テスト環境では MaterialApp で囲む必要があります
     await tester.pumpWidget(
       ProviderScope(
-        overrides: [
-          todoRepositoryProvider.overrideWithValue(mockRepo),
-        ],
+        overrides: [todoRepositoryProvider.overrideWithValue(mockRepo)],
         child: const MaterialApp(home: TodoListPage()),
       ),
     );
@@ -69,9 +67,7 @@ void main() {
 
     await tester.pumpWidget(
       ProviderScope(
-        overrides: [
-          todoRepositoryProvider.overrideWithValue(mockRepo),
-        ],
+        overrides: [todoRepositoryProvider.overrideWithValue(mockRepo)],
         child: const MaterialApp(home: TodoListPage()),
       ),
     );

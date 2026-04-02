@@ -42,7 +42,9 @@ part 'todo_providers.g.dart';
 //   テストがしやすくなります。
 @riverpod
 TodoRepository todoRepository(Ref ref) {
-  throw UnimplementedError('todoRepositoryProvider must be overridden in ProviderScope');
+  throw UnimplementedError(
+    'todoRepositoryProvider must be overridden in ProviderScope',
+  );
 }
 
 // ── TodoList (AsyncNotifier) ───────────────────────────────
@@ -78,10 +80,9 @@ class TodoList extends _$TodoList {
   // Firestore に書き込むと watchTodos の Stream に変化が流れ、
   // state が自動更新されます（手動で state を変える必要なし）。
   Future<void> addTodo({required String title, String? description}) async {
-    await ref.read(todoRepositoryProvider).addTodo(
-          title: title,
-          description: description,
-        );
+    await ref
+        .read(todoRepositoryProvider)
+        .addTodo(title: title, description: description);
   }
 
   // ── toggleCompleted ───────────────────────────────────────
@@ -90,9 +91,9 @@ class TodoList extends _$TodoList {
   // freezed が自動生成した `copyWith` メソッドを使っています。
   // 「元の todo の isCompleted だけを反転した新しいオブジェクト」を作ります。
   Future<void> toggleCompleted(Todo todo) async {
-    await ref.read(todoRepositoryProvider).updateTodo(
-          todo.copyWith(isCompleted: !todo.isCompleted),
-        );
+    await ref
+        .read(todoRepositoryProvider)
+        .updateTodo(todo.copyWith(isCompleted: !todo.isCompleted));
   }
 
   // ── updateTodo ────────────────────────────────────────────

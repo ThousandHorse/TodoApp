@@ -41,9 +41,11 @@ class FirestoreTodoDatasource {
     return _collection
         .orderBy('createdAt', descending: true)
         .snapshots()
-        .map((snapshot) => snapshot.docs
-            .map((doc) => TodoModel.fromJson({...doc.data(), 'id': doc.id}))
-            .toList());
+        .map(
+          (snapshot) => snapshot.docs
+              .map((doc) => TodoModel.fromJson({...doc.data(), 'id': doc.id}))
+              .toList(),
+        );
   }
 
   // ── addTodo ─────────────────────────────────────────────────
