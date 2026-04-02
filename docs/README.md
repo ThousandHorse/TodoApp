@@ -91,6 +91,27 @@ flutterfire configure --project=YOUR_FIREBASE_PROJECT_ID
 > ⚠️ `firebase_options.dart` はセキュリティ情報を含むため `.gitignore` に含まれています。
 > リポジトリをクローンした場合は**毎回この手順が必要**です。
 
+#### ③-b google-services.json を配置する（Android 用）
+
+`flutterfire configure` とは別に、**Android ビルドには `google-services.json` が必要**です。
+このファイルも `.gitignore` に含まれているため、リポジトリには含まれていません。
+
+**取得手順：**
+1. [Firebase Console](https://console.firebase.google.com/) →「プロジェクトの設定」を開く
+2.「マイアプリ」セクションで Android アプリを選択
+3.「**google-services.json をダウンロード**」をクリック
+4. ダウンロードしたファイルを `android/app/` に配置する
+
+```
+TodoApp/
+└── android/
+    └── app/
+        └── google-services.json   ← ここに置く
+```
+
+> ⚠️ **Git にはコミットしないでください。** セキュリティ情報が含まれています。
+> 詳細は各セットアップドキュメントの「google-services.json を配置する」セクションを参照してください。
+
 ---
 
 #### ④ アプリを起動

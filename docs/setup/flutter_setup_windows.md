@@ -210,6 +210,41 @@ flutterfire configure --project=YOUR_FIREBASE_PROJECT_ID
 
 実行すると `lib/firebase_options.dart` が自動生成されます。
 
+### 5-7. google-services.json を配置する（Android 用）
+
+`flutterfire configure` は `firebase_options.dart` を生成しますが、**Android ビルドには別途 `google-services.json` が必要**です。
+
+#### 取得手順
+
+1. [Firebase Console](https://console.firebase.google.com/) を開く
+2. 対象プロジェクトを選択
+3. 左メニューの歯車アイコン →「**プロジェクトの設定**」を開く
+4.「**マイアプリ**」セクションで Android アプリを選択
+5.「**google-services.json をダウンロード**」ボタンをクリック
+
+> ℹ️ Android アプリが登録されていない場合は「アプリを追加」→「Android」から登録してください。
+> パッケージ名は `com.example.todo_app`（`android\app\build.gradle` の `applicationId` で確認できます）。
+
+#### 配置場所
+
+ダウンロードしたファイルを以下のパスに配置します：
+
+```
+TodoApp\
+└── android\
+    └── app\
+        └── google-services.json   ← ここに置く
+```
+
+```powershell
+# PowerShell で確認（配置できていれば表示される）
+Test-Path android\app\google-services.json
+# True と表示されればOK
+```
+
+> ⚠️ `google-services.json` はセキュリティ情報を含むため `.gitignore` に登録されています。
+> **Git にはコミットしないでください。** リポジトリをクローンするたびに手動で配置が必要です。
+
 ---
 
 ## ⑥ flutter doctor で最終確認
