@@ -13,6 +13,7 @@ Flutter 初心者向けに、このアプリで使っている技術と実装内
 | [05_code_generation.md](05_code_generation.md) | freezed / json_serializable / riverpod_generator |
 | [06_testing.md](06_testing.md) | テストの書き方（Repository / Notifier / Widget） |
 | [07_cicd.md](07_cicd.md) | GitHub Actions による CI/CD パイプライン |
+| [08_figma.md](08_figma.md) | Figma による画面設計・デザインフローと開発との連携方法 |
 
 ---
 
@@ -29,6 +30,7 @@ Flutter 初心者向けに、このアプリで使っている技術と実装内
 | riverpod_generator | Riverpod プロバイダーのコード生成 |
 | fake_cloud_firestore | テスト用インメモリ Firestore |
 | mocktail | モッキングライブラリ |
+| **Figma** | **画面設計・UI デザイン・プロトタイプ作成** |
 
 ---
 
