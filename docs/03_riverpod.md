@@ -12,7 +12,101 @@ Riverpod を使うと：
 
 ---
 
-## プロバイダーの基本
+## Provider（プロバイダー）とは何か
+
+### 一言で言うと
+
+> **「データの置き場所」であり「データを配る仕組み」**
+
+---
+
+### 身近なもので例えると
+
+コンビニの**陳列棚**をイメージしてください。
+
+```
+【陳列棚 = Provider】
+
+  ┌─────────────────────────────┐
+  │  Todo リスト（最新のデータ）  │  ← 常に最新に保たれている
+  └─────────────────────────────┘
+         ↑ 更新              ↓ 取り出し
+    （Firestoreから）   （どの画面からでも）
+```
+
+- **棚（Provider）** にデータを置いておく
+- **どの画面（Widget）からでも**棚からデータを取り出せる
+- 棚のデータが**更新されると、それを見ている画面が自動で再描画**される
+
+---
+
+### Provider がない世界
+
+Provider がないと、データを「バケツリレー」で渡す必要があります：
+
+```
+画面A
+ └── Widget1（データを持つ）
+       └── Widget2（上から受け取る）
+             └── Widget3（上から受け取る）
+                   └── Widget4（ここで使いたかった！）
+```
+
+Widget1 → Widget2 → Widget3 → Widget4 と、使わない中間ウィジェットにも
+データを渡し続けなければなりません（これを **prop drilling** と言います）。
+
+---
+
+### Provider がある世界
+
+```
+        Provider（棚）
+       /       |       \
+    Widget1  Widget2  Widget4（直接取り出せる！）
+```
+
+どの Widget も**直接** Provider からデータを取り出せます。
+中間の Widget には何も渡す必要がありません。
+
+---
+
+### このアプリでの Provider の種類
+
+このアプリでは2つの Provider が登場します：
+
+| Provider | 何を提供するか | 定義場所 |
+|---|---|---|
+| `todoRepositoryProvider` | データ操作の窓口（Firebase との通信役） | `todo_providers.dart` |
+| `todoListProvider` | Todo の一覧データ（AsyncValue） | `todo_providers.dart` |
+
+#### `todoRepositoryProvider`
+
+```
+todoRepositoryProvider
+    ↓ 提供するもの
+TodoRepository（Firestore を操作するクラス）
+    ↓ できること
+  - watchTodos()   Todo 一覧をリアルタイムで監視
+  - addTodo()      Todo を追加
+  - updateTodo()   Todo を更新
+  - deleteTodo()   Todo を削除
+```
+
+#### `todoListProvider`
+
+```
+todoListProvider
+    ↓ 提供するもの
+AsyncValue<List<Todo>>
+    ↓ 3つの状態
+  - loading  → Firestore からデータ取得中
+  - error    → 通信エラーなど
+  - data     → Todo の一覧（List<Todo>）
+```
+
+---
+
+### Provider の基本
 
 **プロバイダー** = データを提供・管理するオブジェクト
 
